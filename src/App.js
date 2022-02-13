@@ -1,11 +1,18 @@
 import { db } from "./firebase-config";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import {
+	collection,
+	getDocs,
+	addDoc,
+	updateDoc,
+	doc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 function App() {
 	const [user, setUser] = useState([]);
 	const [newName, setNewName] = useState([]);
 	const [newAge, setNewAge] = useState([]);
+	const [counter, setCounter] = useState(0);
 	const userCollectionRef = collection(db, "users");
 	console.log(userCollectionRef);
 
@@ -26,6 +33,14 @@ function App() {
 	}, []);
 
 	// 3. UPDATE
+
+	const updateUser = async (id, age) => {
+		const userDoc = doc(db, "users", id);
+		const newFields = { age: age + 1 };
+		console.log(userDoc);
+		console.log(newFields);
+		await updateDoc(userDoc, newFields);
+	};
 	// 4. DELETE
 	return (
 		<div className='App'>
@@ -44,6 +59,9 @@ function App() {
 				<div key={index}>
 					<h1>{data.name}</h1>
 					<h2>{data.age}</h2>
+					<button onClick={() => updateUser(data?.id, data?.age)}>
+						Update Age
+					</button>
 				</div>
 			))}
 		</div>
