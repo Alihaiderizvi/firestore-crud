@@ -4,6 +4,7 @@ import {
 	getDocs,
 	addDoc,
 	updateDoc,
+	deleteDoc,
 	doc,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -33,7 +34,10 @@ function App() {
 	}, []);
 
 	// 3. UPDATE
-
+	const deleteUser = async (id) => {
+		const userDoc = doc(db, "users", id);
+		await deleteDoc(userDoc);
+	};
 	const updateUser = async (id, age) => {
 		const userDoc = doc(db, "users", id);
 		const newFields = { age: age + 1 };
@@ -62,6 +66,7 @@ function App() {
 					<button onClick={() => updateUser(data?.id, data?.age)}>
 						Update Age
 					</button>
+					<button onClick={() => deleteUser(data?.id)}>Delete User</button>
 				</div>
 			))}
 		</div>
